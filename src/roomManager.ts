@@ -1,5 +1,5 @@
 import { WebSocket } from "ws";
-import { CreateRoom, Message } from "./types";
+import { CreateRoom, Message, RoomCreated } from "./types";
 import { Room } from "./room";
 
 export class RoomManager{
@@ -32,6 +32,15 @@ export class RoomManager{
                         const room = new Room(message.payload.room, existingUser, user);
                         this.rooms.push(room);
                         this.RoomToUser.delete(message.payload.room);
+
+                        existingUser.send(JSON.stringify({
+                            type: RoomCreated
+                        }))
+
+                        user.send(JSON.stringify({
+                            type: RoomCreated
+                        }))
+                        
                     }else{
                         this.RoomToUser.set(message.payload.room, user);
                     }

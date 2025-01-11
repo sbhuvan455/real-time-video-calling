@@ -1,5 +1,6 @@
 import { WebSocket } from "ws";
 import { CreateRoom, Message, RoomCreated } from "./types";
+// import { Room } from "./room";
 import { Room } from "./room";
 
 export class RoomManager{
@@ -16,6 +17,7 @@ export class RoomManager{
 
     public addUser = (user: WebSocket): void => {
         this.Users.push(user);
+        console.log("Hello A user Joined!");
         this.attachListeners(user);
     }
 
@@ -26,6 +28,7 @@ export class RoomManager{
 
             switch(message.type){
                 case CreateRoom:
+                    console.log("User asked tpo create a room");
                     const existingUser: WebSocket | undefined = this.RoomToUser.get(message.payload.room);
 
                     if(existingUser){
@@ -34,11 +37,17 @@ export class RoomManager{
                         this.RoomToUser.delete(message.payload.room);
 
                         existingUser.send(JSON.stringify({
-                            type: RoomCreated
+                            type: RoomCreated,
+                            payload: {
+                                canSendOffer: true
+                            }
                         }))
 
                         user.send(JSON.stringify({
-                            type: RoomCreated
+                            type: RoomCreated,
+                            payload: {
+                                canSendOffer: false
+                            }
                         }))
                         
                     }else{

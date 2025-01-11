@@ -1,5 +1,5 @@
 import { WebSocket } from "ws";
-import { Message, Offer, SendOffer } from "./types";
+import { Answer, Message, Offer, SendAnswer, SendOffer } from "./types";
 
 export class Room{
     public name: string;
@@ -29,6 +29,18 @@ export class Room{
                     }else{
                         this.user1.send(JSON.stringify({
                             type: Offer,
+                            payload: message.payload
+                        }))
+                    }
+                case SendAnswer:
+                    if(user === this.user1){
+                        this.user2.send(JSON.stringify({
+                            type: Answer,
+                            payload: message.payload
+                        }))
+                    }else{
+                        this.user1.send(JSON.stringify({
+                            type: Answer,
                             payload: message.payload
                         }))
                     }

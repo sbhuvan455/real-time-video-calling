@@ -1,6 +1,8 @@
 import { WebSocketServer } from 'ws';
 import { RoomManager } from './roomManager';
 
+console.log("Hello world!");
+
 const wss = new WebSocketServer({ port: 8080 });
 
 const Manager = new RoomManager();
